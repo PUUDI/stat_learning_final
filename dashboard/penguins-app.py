@@ -117,22 +117,25 @@ else:
         famType = st.sidebar.selectbox('Family type',('Married','Single / not married','Civil marriage','Widow'))
         # input_df = convert_dummy(input_df,'famType')
 
-        data = {'CODE_GENDER': gender,
-                'FLAG_OWN_CAR': car,
-                'FLAG_OWN_REALTY': realty,
-                'FLAG_MOBIL':phone,
-                'FLAG_EMAIL':email,
-                'FLAG_WORK_PHONE':wkphone,
-                'CNT_CHILDREN':child_no,
-                'AMT_INCOME_TOTAL':inc,
+                        
+
+
+        data = {'Gender': gender,
+                'Car': car,
+                'Reality': realty,
+                'phone':phone,
+                'email':email,
+                'wkphone':wkphone,
+                'ChldNo':child_no,
+                'inc':inc,
                 'DAYS_BIRTH':age,
                 'DAYS_EMPLOYED':empDay,
-                'CNT_FAM_MEMBERS':famSize,
-                'NAME_INCOME_TYPE':incomeType,
-                'OCCUPATION_TYPE':occupation,
-                'NAME_HOUSING_TYPE':houseType,
-                'NAME_EDUCATION_TYPE':eduType,
-                'NAME_FAMILY_STATUS':famType}
+                'famsize':famSize,
+                'inctp':incomeType,
+                'occyp':occupation,
+                'houtp':houseType,
+                'edutp':eduType,
+                'famtp':famType}
 
         features = pd.DataFrame(data, index=[0])
         return features
@@ -155,7 +158,7 @@ input_df['inc'] = input_df['inc']/10000
 input_df = get_category(input_df,'inc', 3, ["low","medium", "high"], qcut = True)
 input_df = convert_dummy(input_df,'gp_inc')
 
-input_df['Age']=-(input_df['DAYS_BIRTH'])//365
+# input_df['Age']=-(input_df['DAYS_BIRTH'])//365
 
 input_df = get_category(input_df,'Age',5, ["lowest","low","medium","high","highest"])
 
@@ -207,7 +210,7 @@ else:
     st.write(input_df)
 
 # Reads in saved classification model
-load_clf = pickle.load(open('penguins_clf.pkl', 'rb'))
+load_clf = pickle.load(open('credit.pkl', 'rb'))
 
 # Apply model to make predictions
 prediction = load_clf.predict(input_df)
@@ -223,9 +226,9 @@ c2 = col2.container()
 c1.subheader('Prediction')
 penguins_species = np.array(['Negative','Positive'])
 if prediction[0] == 0:
-    status = 'The Patient is Negative'
+    status = 'The Customer is Eligible'
 else:
-    status = 'The Patient is positive with Dementia'
+    status = 'The Customer is not eligible'
 
 c1.subheader(status)
 
